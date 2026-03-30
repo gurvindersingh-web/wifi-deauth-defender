@@ -1,2 +1,7 @@
-scapy
-requests
+# WiFi Deauth Defender — Python Dependencies
+# Install: pip install -r requirements.txt
+
+scapy>=2.5.0          # Packet capture & 802.11 frame parsing
+httpx>=0.25.0         # Async-capable HTTP client for webhook delivery
+pyyaml>=6.0           # YAML configuration loading
+pytest>=7.0           # Test runner (dev dependency)

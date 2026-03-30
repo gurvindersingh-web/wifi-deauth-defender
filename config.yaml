@@ -1,0 +1,97 @@
+# =============================================================================
+# WiFi Deauth Defender — Configuration
+# =============================================================================
+# All parameters controlling capture, detection, alerting, and deployment.
+# Copy this file and adjust values for your environment.
+
+# ---------------------------------------------------------------------------
+# Packet Capture
+# ---------------------------------------------------------------------------
+capture:
+  # Wireless interface in monitor mode (e.g., wlan0mon).
+  interface: wlan0mon
+
+  # WiFi channel to lock onto (0 = channel-hop / use current).
+  channel: 6
+
+  # Berkeley Packet Filter expression.  "subtype deauth" isolates
+  # IEEE 802.11 management frames with subtype 0x0c (deauthentication).
+  bpf_filter: "subtype deauth"
+
+  # In-memory batch parameters.  Batches flush on whichever condition
+  # is met first: packet count OR elapsed time.
+  batch_size: 50          # max packets per batch
+  batch_timeout: 5.0      # seconds before a partial batch is flushed
+
+# ---------------------------------------------------------------------------
+# Anomaly Detection
+# ---------------------------------------------------------------------------
+detection:
+  # Rolling baseline window in seconds (default: 1 hour).
+  baseline_window: 3600
+
+  # Number of standard deviations above the mean to flag as anomalous.
+  sigma_threshold: 3.0
+
+  # Minimum observations before the detector activates for a given source.
+  # Prevents false positives during cold-start.
+  min_baseline_samples: 10
+
+  # Time bucket size in seconds for rate computation.
+  bucket_size: 10
+
+  # Stale source eviction: baselines older than this are discarded (seconds).
+  eviction_timeout: 7200   # 2 hours
+
+  # Threat-score → severity mapping thresholds (score is 0-10).
+  severity_thresholds:
+    critical: 8.0
+    high: 6.0
+    medium: 4.0
+    low: 2.0
+
+# ---------------------------------------------------------------------------
+# Alerting & Webhook
+# ---------------------------------------------------------------------------
+alerting:
+  # n8n (or any HTTP endpoint) webhook URL.
+  webhook_url: "https://thunder0123.app.n8n.cloud/webhook-test/8a37cb06-dc42-46e7-946a-0521f48f7ca8"
+
+  # How often to flush the alert batch to the webhook (seconds).
+  batch_interval: 30
+
+  # Maximum alerts per webhook payload.
+  max_batch_size: 100
+
+  # Retry policy for failed HTTP POSTs.
+  retry_attempts: 3
+  retry_delay: 5           # base delay in seconds (exponential back-off)
+
+  # Alerts from the same source MAC within this window (seconds) are
+  # correlated into a single incident.
+  correlation_window: 60
+
+  # HTTP request timeout in seconds.
+  request_timeout: 15
+
+# ---------------------------------------------------------------------------
+# Logging
+# ---------------------------------------------------------------------------
+logging:
+  level: INFO              # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  file: deauth_defender.log
+  max_bytes: 10485760      # 10 MB per log file
+  backup_count: 3          # rotated backups to keep
+
+# ---------------------------------------------------------------------------
+# Security & Privacy
+# ---------------------------------------------------------------------------
+security:
+  # If true, MAC addresses are SHA-256 hashed before being included
+  # in webhook payloads and log messages.
+  hash_macs: false
+
+  # Restrict capture to known monitor-mode interfaces.
+  allowed_interfaces:
+    - wlan0mon
+    - wlan1mon

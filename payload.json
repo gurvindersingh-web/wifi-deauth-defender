@@ -1,0 +1,111 @@
+ANOMALY  src=aa:bb:cc:dd:ee:ff  z=4.36  count=150  mean=12.5  std=31.6  targets=150  score=6.4  severity=high
+Webhook returned 404 on attempt 1/3: {"code":404,"message":"The requested webhook \"8a37cb06-dc42-46e7-946a-0521f48f7ca8\" is not registered.","hint":"Click the 'Execute workflow' button on the canvas, then try again. (In test mode, the 
+Webhook returned 404 on attempt 2/3: {"code":404,"message":"The requested webhook \"8a37cb06-dc42-46e7-946a-0521f48f7ca8\" is not registered.","hint":"Click the 'Execute workflow' button on the canvas, then try again. (In test mode, the 
+Webhook returned 404 on attempt 3/3: {"code":404,"message":"The requested webhook \"8a37cb06-dc42-46e7-946a-0521f48f7ca8\" is not registered.","hint":"Click the 'Execute workflow' button on the canvas, then try again. (In test mode, the 
+Webhook delivery FAILED after 3 attempts
+============================================================
+  WiFi Deauth Defender — End-to-End Simulation
+============================================================
+
+[Phase 1] Feeding normal traffic (20 buckets × 5 packets) …
+  → Alerts during baseline: 0
+  ✓ No false positives during baseline learning
+
+[Phase 2] Injecting attack burst (150 packets, 10 targets) …
+  → Alerts from primary attack: 1
+
+[Phase 3] Injecting second attacker burst (80 packets) …
+  → Alerts from second attacker: 0
+
+[Phase 4] Correlating alerts and assembling payload …
+
+[Phase 5] Validating webhook payload schema …
+  ✓ Payload schema is valid!
+
+[Phase 6] Testing Webhook Delivery …
+  → Sending test payload to webhook: https://thunder0123.app.n8n.cloud/webhook-test/8a37cb06-dc42-46e7-946a-0521f48f7ca8
+  ✗ Webhook delivery failed.
+
+────────────────────────────────────────────────────────────
+ SIMULATION RESULTS
+────────────────────────────────────────────────────────────
+  Total alerts:          1
+  Severity distribution: {'high': 1}
+  Unique sources:        1
+  Unique targets:        1
+  Total deauth frames:   150
+  Incidents:             1
+
+  Incident: aa:bb:cc:dd:ee:ff_1221
+    Severity:    high
+    Alerts:      1
+    Duration:    0.0s
+    Targets:     ['de:ad:be:ef:09:95']
+
+────────────────────────────────────────────────────────────
+ FULL PAYLOAD JSON
+────────────────────────────────────────────────────────────
+{
+  "batch_metadata": {
+    "timestamp": "2026-03-30T05:52:16",
+    "alert_count": 1,
+    "severity_distribution": {
+      "high": 1
+    },
+    "unique_sources": 1,
+    "unique_targets": 1,
+    "total_deauth_frames": 150,
+    "incident_count": 1
+  },
+  "incidents": [
+    {
+      "incident_id": "aa:bb:cc:dd:ee:ff_1221",
+      "source_mac": "aa:bb:cc:dd:ee:ff",
+      "alert_count": 1,
+      "duration": 0.0,
+      "severity": "high",
+      "target_macs": [
+        "de:ad:be:ef:09:95"
+      ],
+      "alerts": [
+        {
+          "alert_id": "cf2ba868bf80",
+          "source_mac": "aa:bb:cc:dd:ee:ff",
+          "target_mac": "de:ad:be:ef:09:95",
+          "bssid": "aa:bb:cc:dd:ee:ff",
+          "reason": 7,
+          "signal": -35,
+          "timestamp": 1221.49,
+          "severity": "high",
+          "score": 6.43,
+          "channel": 6,
+          "deauth_count": 150,
+          "z_score": 4.36
+        }
+      ]
+    }
+  ],
+  "raw_alerts": [
+    {
+      "alert_id": "cf2ba868bf80",
+      "source_mac": "aa:bb:cc:dd:ee:ff",
+      "target_mac": "de:ad:be:ef:09:95",
+      "bssid": "aa:bb:cc:dd:ee:ff",
+      "reason": 7,
+      "signal": -35,
+      "timestamp": 1221.49,
+      "severity": "high",
+      "score": 6.43,
+      "channel": 6,
+      "deauth_count": 150,
+      "z_score": 4.36
+    }
+  ]
+}
+
+────────────────────────────────────────────────────────────
+  Detector stats: {'tracked_sources': 2, 'total_packets_processed': 360, 'total_alerts_generated': 1}
+────────────────────────────────────────────────────────────
+
+  ✓ ALL CHECKS PASSED — simulation successful!
+
